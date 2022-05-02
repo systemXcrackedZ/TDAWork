@@ -7,54 +7,54 @@ namespace TDAWork.Contoller
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private GameObject BulletPrefab; // Префаб пули
+        [SerializeField] private GameObject BulletPrefab; // РџСЂРµС„Р°Р± РїСѓР»Рё
 
-        [SerializeField] private float MovementSpeed; // Переменная скорости перемещения
-        [SerializeField] private float RotationSpeed; // Переменная скорости поворота
-        [SerializeField] private float ShotDelay; // Переменная КД выстрела
+        [SerializeField] private float MovementSpeed; // РџРµСЂРµРјРµРЅРЅР°СЏ СЃРєРѕСЂРѕСЃС‚Рё РїРµСЂРµРјРµС‰РµРЅРёСЏ
+        [SerializeField] private float RotationSpeed; // РџРµСЂРµРјРµРЅРЅР°СЏ СЃРєРѕСЂРѕСЃС‚Рё РїРѕРІРѕСЂРѕС‚Р°
+        [SerializeField] private float ShotDelay; // РџРµСЂРµРјРµРЅРЅР°СЏ РљР” РІС‹СЃС‚СЂРµР»Р°
 
-        private bool isShot = false; // Логическая переменная КД выстрела
-        private RicochetDrawer Trajectory; // Линия траектории
+        private bool isShot = false; // Р›РѕРіРёС‡РµСЃРєР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РљР” РІС‹СЃС‚СЂРµР»Р°
+        private RicochetDrawer Trajectory; // Р›РёРЅРёСЏ С‚СЂР°РµРєС‚РѕСЂРёРё
 
-        private void Awake() => Trajectory = GameObject.Find("RicochetDrawer").GetComponent<RicochetDrawer>(); // Присваивание значение линии траектории
+        private void Awake() => Trajectory = GameObject.Find("RicochetDrawer").GetComponent<RicochetDrawer>(); // РџСЂРёСЃРІР°РёРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёРµ Р»РёРЅРёРё С‚СЂР°РµРєС‚РѕСЂРёРё
 
-        private void FixedUpdate() // Перемещение с обработкой на фиксированном количеством кадров
+        private void FixedUpdate() // РџРµСЂРµРјРµС‰РµРЅРёРµ СЃ РѕР±СЂР°Р±РѕС‚РєРѕР№ РЅР° С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕРј РєРѕР»РёС‡РµСЃС‚РІРѕРј РєР°РґСЂРѕРІ
         {
-            if (Input.GetKey(KeyCode.W)) transform.Translate(Vector3.forward * (Time.deltaTime * MovementSpeed)); // Перемещение вперёд
-            else if (Input.GetKey(KeyCode.S)) transform.Translate(Vector3.back * (Time.deltaTime * MovementSpeed)); // Перемещение назад
+            if (Input.GetKey(KeyCode.W)) transform.Translate(Vector3.forward * (Time.deltaTime * MovementSpeed)); // РџРµСЂРµРјРµС‰РµРЅРёРµ РІРїРµСЂС‘Рґ
+            else if (Input.GetKey(KeyCode.S)) transform.Translate(Vector3.back * (Time.deltaTime * MovementSpeed)); // РџРµСЂРµРјРµС‰РµРЅРёРµ РЅР°Р·Р°Рґ
 
-            if (Input.GetKey(KeyCode.A)) transform.rotation *= Quaternion.AngleAxis(RotationSpeed, Vector3.down); // Вращение в левую сторону
-            if (Input.GetKey(KeyCode.D)) transform.rotation *= Quaternion.AngleAxis(RotationSpeed, Vector3.up); // Вращение в правую сторону
+            if (Input.GetKey(KeyCode.A)) transform.rotation *= Quaternion.AngleAxis(RotationSpeed, Vector3.down); // Р’СЂР°С‰РµРЅРёРµ РІ Р»РµРІСѓСЋ СЃС‚РѕСЂРѕРЅСѓ
+            if (Input.GetKey(KeyCode.D)) transform.rotation *= Quaternion.AngleAxis(RotationSpeed, Vector3.up); // Р’СЂР°С‰РµРЅРёРµ РІ РїСЂР°РІСѓСЋ СЃС‚РѕСЂРѕРЅСѓ
         }
 
-        private void Update() // Обработка на каждом кадре
+        private void Update() // РћР±СЂР°Р±РѕС‚РєР° РЅР° РєР°Р¶РґРѕРј РєР°РґСЂРµ
         {
-            Vector3 forward = transform.TransformDirection(Vector3.forward); // Получение направления вперёд относительно персонажа
+            Vector3 forward = transform.TransformDirection(Vector3.forward); // РџРѕР»СѓС‡РµРЅРёРµ РЅР°РїСЂР°РІР»РµРЅРёСЏ РІРїРµСЂС‘Рґ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РїРµСЂСЃРѕРЅР°Р¶Р°
 
-            RaycastHit[] hits = Physics.RaycastAll(transform.position, forward); // Поиск всех объектов на которые смотрит персонаж
+            RaycastHit[] hits = Physics.RaycastAll(transform.position, forward); // РџРѕРёСЃРє РІСЃРµС… РѕР±СЉРµРєС‚РѕРІ РЅР° РєРѕС‚РѕСЂС‹Рµ СЃРјРѕС‚СЂРёС‚ РїРµСЂСЃРѕРЅР°Р¶
             foreach (RaycastHit hit in hits)
             {
-                if (hit.transform.gameObject != gameObject) // если объект не текущий игрок
-                    Trajectory.DrawTrajectory(new Vector3[2] { transform.Find("mesh").position, forward *= hit.distance }); //рисует траекторию относительно объекта
-                else // иначе
-                    Trajectory.DrawTrajectory(new Vector3[2] { transform.Find("mesh").position, forward *= 8 }); //рисует прямую траекторию
+                if (hit.transform.gameObject != gameObject) // РµСЃР»Рё РѕР±СЉРµРєС‚ РЅРµ С‚РµРєСѓС‰РёР№ РёРіСЂРѕРє
+                    Trajectory.DrawTrajectory(new Vector3[2] { transform.Find("mesh").position, forward *= hit.distance }); //СЂРёСЃСѓРµС‚ С‚СЂР°РµРєС‚РѕСЂРёСЋ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РѕР±СЉРµРєС‚Р°
+                else // РёРЅР°С‡Рµ
+                    Trajectory.DrawTrajectory(new Vector3[2] { transform.Find("mesh").position, forward *= 8 }); //СЂРёСЃСѓРµС‚ РїСЂСЏРјСѓСЋ С‚СЂР°РµРєС‚РѕСЂРёСЋ
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && !isShot) // Нажат пробел и выстрел не в КД
+            if (Input.GetKeyDown(KeyCode.Space) && !isShot) // РќР°Р¶Р°С‚ РїСЂРѕР±РµР» Рё РІС‹СЃС‚СЂРµР» РЅРµ РІ РљР”
             {
-                isShot = true; // Выстрел становится в КД
-                StartCoroutine(Shot()); // Выстрел
+                isShot = true; // Р’С‹СЃС‚СЂРµР» СЃС‚Р°РЅРѕРІРёС‚СЃСЏ РІ РљР”
+                StartCoroutine(Shot()); // Р’С‹СЃС‚СЂРµР»
             }
         }
 
-        private IEnumerator Shot() // Коротин выстрела
+        private IEnumerator Shot() // РљРѕСЂРѕС‚РёРЅ РІС‹СЃС‚СЂРµР»Р°
         {
-            Bullet bullet = Instantiate(BulletPrefab, transform.Find("mesh").position, transform.rotation).AddComponent<Bullet>(); // Создаётся пуля
-            bullet.EnemyObject = GameObject.Find("EnemyPrefab(Clone)"); // Пуле как объект задаётся аппонент(в данном случае компьютер)
+            Bullet bullet = Instantiate(BulletPrefab, transform.Find("mesh").position, transform.rotation).AddComponent<Bullet>(); // РЎРѕР·РґР°С‘С‚СЃСЏ РїСѓР»СЏ
+            bullet.EnemyObject = GameObject.Find("EnemyPrefab(Clone)"); // РџСѓР»Рµ РєР°Рє РѕР±СЉРµРєС‚ Р·Р°РґР°С‘С‚СЃСЏ Р°РїРїРѕРЅРµРЅС‚(РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ РєРѕРјРїСЊСЋС‚РµСЂ)
 
-            yield return new WaitForSeconds(ShotDelay); // Выполняется КД выстрела
+            yield return new WaitForSeconds(ShotDelay); // Р’С‹РїРѕР»РЅСЏРµС‚СЃСЏ РљР” РІС‹СЃС‚СЂРµР»Р°
 
-            isShot = false; // КД выстрела спадает
+            isShot = false; // РљР” РІС‹СЃС‚СЂРµР»Р° СЃРїР°РґР°РµС‚
         }
     }
 }
