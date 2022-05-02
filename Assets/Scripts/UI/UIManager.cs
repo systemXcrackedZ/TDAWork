@@ -5,20 +5,20 @@ namespace TDAWork.UI
 {
     public class UIManager : MonoBehaviour
     {
-        public static UIManager singleton; // Публичный указатель на класс
+        public static UIManager singleton; // РџСѓР±Р»РёС‡РЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РєР»Р°СЃСЃ
 
-        [SerializeField] private Text countText; // Счётчик очков
+        [SerializeField] private Text countText; // РЎС‡С‘С‚С‡РёРє РѕС‡РєРѕРІ
 
-        private int playerPoints; // Переменная очков игрока
-        private int enemyPoints; // Переменная очков противника
+        private int playerPoints; // РџРµСЂРµРјРµРЅРЅР°СЏ РѕС‡РєРѕРІ РёРіСЂРѕРєР°
+        private int enemyPoints; // РџРµСЂРµРјРµРЅРЅР°СЏ РѕС‡РєРѕРІ РїСЂРѕС‚РёРІРЅРёРєР°
 
-        private void Awake() => singleton = this; // Присваивание значения указателя на класс
+        private void Awake() => singleton = this; // РџСЂРёСЃРІР°РёРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ СѓРєР°Р·Р°С‚РµР»СЏ РЅР° РєР»Р°СЃСЃ
 
-        public int IncreasePoints(bool isBot) // Изменение очков
+        public int IncreasePoints(bool isBot) // РР·РјРµРЅРµРЅРёРµ РѕС‡РєРѕРІ
         {
-            int newCount = isBot ? enemyPoints++ : playerPoints++; // Указание нового количества очков
-            countText.text = $"{playerPoints}:{enemyPoints}"; // Задание текста счётчика очков
-            return newCount; // Возвращения нового количества очков
+            int newCount = isBot ? enemyPoints++ : playerPoints++; // РЈРєР°Р·Р°РЅРёРµ РЅРѕРІРѕРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° РѕС‡РєРѕРІ
+            countText.text = $"{playerPoints}:{enemyPoints}"; // Р—Р°РґР°РЅРёРµ С‚РµРєСЃС‚Р° СЃС‡С‘С‚С‡РёРєР° РѕС‡РєРѕРІ
+            return newCount; // Р’РѕР·РІСЂР°С‰РµРЅРёСЏ РЅРѕРІРѕРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° РѕС‡РєРѕРІ
         }
     }
 }
