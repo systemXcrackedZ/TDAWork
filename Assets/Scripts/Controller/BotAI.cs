@@ -5,82 +5,82 @@ namespace TDAWork.Contoller
 {
     public class BotAI : MonoBehaviour
     {
-        public static BotAI singleton;  // Публичный указатель на класс
+        public static BotAI singleton;  // РџСѓР±Р»РёС‡РЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РєР»Р°СЃСЃ
 
-        [SerializeField] private float MovementSpeed; // Скорость перемещения
-        [SerializeField] private float RotationSpeed; // Скорость вращения
-        [SerializeField] private GameObject BulletPrefab; // Префаб пули
+        [SerializeField] private float MovementSpeed; // РЎРєРѕСЂРѕСЃС‚СЊ РїРµСЂРµРјРµС‰РµРЅРёСЏ
+        [SerializeField] private float RotationSpeed; // РЎРєРѕСЂРѕСЃС‚СЊ РІСЂР°С‰РµРЅРёСЏ
+        [SerializeField] private GameObject BulletPrefab; // РџСЂРµС„Р°Р± РїСѓР»Рё
 
-        [HideInInspector] public bool isReverseMoving; // Обратное движение?
-        [HideInInspector] public int currentWaypoint; // Текущий чекпоинт
+        [HideInInspector] public bool isReverseMoving; // РћР±СЂР°С‚РЅРѕРµ РґРІРёР¶РµРЅРёРµ?
+        [HideInInspector] public int currentWaypoint; // РўРµРєСѓС‰РёР№ С‡РµРєРїРѕРёРЅС‚
 
-        private GameObject[] waypoints; // Чекпоинты
-        private float lastWaypointSwitchTime; // Последнее время перехода на другую точку
+        private GameObject[] waypoints; // Р§РµРєРїРѕРёРЅС‚С‹
+        private float lastWaypointSwitchTime; // РџРѕСЃР»РµРґРЅРµРµ РІСЂРµРјСЏ РїРµСЂРµС…РѕРґР° РЅР° РґСЂСѓРіСѓСЋ С‚РѕС‡РєСѓ
 
-        private readonly Vector3[] directions = new Vector3[2] { Vector3.up, Vector3.down }; // Направления вращения
+        private readonly Vector3[] directions = new Vector3[2] { Vector3.up, Vector3.down }; // РќР°РїСЂР°РІР»РµРЅРёСЏ РІСЂР°С‰РµРЅРёСЏ
 
-        private void Start() // Инициализация скрипта
+        private void Start() // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРєСЂРёРїС‚Р°
         {
-            singleton = this; // Присваивание значения указателя на класс
-            waypoints = new GameObject[10]; InitWaypoints(); lastWaypointSwitchTime = Time.time; // Инициализация чекпоинтов
-            StartCoroutine(FindShotTarget()); // Запуск поиска цели
+            singleton = this; // РџСЂРёСЃРІР°РёРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ СѓРєР°Р·Р°С‚РµР»СЏ РЅР° РєР»Р°СЃСЃ
+            waypoints = new GameObject[10]; InitWaypoints(); lastWaypointSwitchTime = Time.time; // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‡РµРєРїРѕРёРЅС‚РѕРІ
+            StartCoroutine(FindShotTarget()); // Р—Р°РїСѓСЃРє РїРѕРёСЃРєР° С†РµР»Рё
         }
-        private void InitWaypoints() // Инициализация чекпоинтов
+        private void InitWaypoints() // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‡РµРєРїРѕРёРЅС‚РѕРІ
         {
-            for (int i = 0; i < waypoints.Length; i++) waypoints[i] = GameObject.Find($"WayPoint ({i})"); // Поиск чекпоинтов
+            for (int i = 0; i < waypoints.Length; i++) waypoints[i] = GameObject.Find($"WayPoint ({i})"); // РџРѕРёСЃРє С‡РµРєРїРѕРёРЅС‚РѕРІ
         }
 
-        private void Update() // Обработка на каждом кадре
+        private void Update() // РћР±СЂР°Р±РѕС‚РєР° РЅР° РєР°Р¶РґРѕРј РєР°РґСЂРµ
         {
-            Vector3 startPosition = waypoints[currentWaypoint].transform.position; // Текущая точка
-            Vector3 endPosition = !isReverseMoving ? waypoints[currentWaypoint + 1].transform.position : waypoints[currentWaypoint - 1].transform.position; // Конечная точка
+            Vector3 startPosition = waypoints[currentWaypoint].transform.position; // РўРµРєСѓС‰Р°СЏ С‚РѕС‡РєР°
+            Vector3 endPosition = !isReverseMoving ? waypoints[currentWaypoint + 1].transform.position : waypoints[currentWaypoint - 1].transform.position; // РљРѕРЅРµС‡РЅР°СЏ С‚РѕС‡РєР°
 
-            float pathLength = Vector3.Distance(startPosition, endPosition); // Дистанция от точки до точки
-            float totalTimeForPath = pathLength / MovementSpeed; // Время для прохождения отрезка
-            float currentTimeOnPath = Time.time - lastWaypointSwitchTime; // Время на прохождение от точки до точки
+            float pathLength = Vector3.Distance(startPosition, endPosition); // Р”РёСЃС‚Р°РЅС†РёСЏ РѕС‚ С‚РѕС‡РєРё РґРѕ С‚РѕС‡РєРё
+            float totalTimeForPath = pathLength / MovementSpeed; // Р’СЂРµРјСЏ РґР»СЏ РїСЂРѕС…РѕР¶РґРµРЅРёСЏ РѕС‚СЂРµР·РєР°
+            float currentTimeOnPath = Time.time - lastWaypointSwitchTime; // Р’СЂРµРјСЏ РЅР° РїСЂРѕС…РѕР¶РґРµРЅРёРµ РѕС‚ С‚РѕС‡РєРё РґРѕ С‚РѕС‡РєРё
 
-            gameObject.transform.position = Vector3.Lerp(startPosition, endPosition, currentTimeOnPath / totalTimeForPath); // Перемещение
+            gameObject.transform.position = Vector3.Lerp(startPosition, endPosition, currentTimeOnPath / totalTimeForPath); // РџРµСЂРµРјРµС‰РµРЅРёРµ
 
-            if (Vector3.Distance(transform.position, endPosition) < 0.1f) // Персонаж дошёл до точки?
+            if (Vector3.Distance(transform.position, endPosition) < 0.1f) // РџРµСЂСЃРѕРЅР°Р¶ РґРѕС€С‘Р» РґРѕ С‚РѕС‡РєРё?
             {
-                if (isReverseMoving) { currentWaypoint--; if (currentWaypoint == 0) isReverseMoving = false; } // Выбор следующей точки
-                else { currentWaypoint++; if (currentWaypoint == 9) isReverseMoving = true; } // Выбор следующей точки
+                if (isReverseMoving) { currentWaypoint--; if (currentWaypoint == 0) isReverseMoving = false; } // Р’С‹Р±РѕСЂ СЃР»РµРґСѓСЋС‰РµР№ С‚РѕС‡РєРё
+                else { currentWaypoint++; if (currentWaypoint == 9) isReverseMoving = true; } // Р’С‹Р±РѕСЂ СЃР»РµРґСѓСЋС‰РµР№ С‚РѕС‡РєРё
 
-                StartCoroutine(Rotate()); lastWaypointSwitchTime = Time.time; // Вращение
+                StartCoroutine(Rotate()); lastWaypointSwitchTime = Time.time; // Р’СЂР°С‰РµРЅРёРµ
             }
         }
 
-        private IEnumerator Rotate() // Вращение
+        private IEnumerator Rotate() // Р’СЂР°С‰РµРЅРёРµ
         {
-            Vector3 direction = directions[Random.Range(0, directions.Length)]; // Выбор направления
+            Vector3 direction = directions[Random.Range(0, directions.Length)]; // Р’С‹Р±РѕСЂ РЅР°РїСЂР°РІР»РµРЅРёСЏ
 
-            int rotationCount = (int)(90 / RotationSpeed); // Количество вращений
+            int rotationCount = (int)(90 / RotationSpeed); // РљРѕР»РёС‡РµСЃС‚РІРѕ РІСЂР°С‰РµРЅРёР№
 
-            for (int i = 0; i < rotationCount; i++) // Цикл вращения
+            for (int i = 0; i < rotationCount; i++) // Р¦РёРєР» РІСЂР°С‰РµРЅРёСЏ
             {
-                transform.rotation *= Quaternion.AngleAxis(RotationSpeed, direction); // Вращение
-                yield return new WaitForSeconds(0.025f); // Задержка плавности вращения
+                transform.rotation *= Quaternion.AngleAxis(RotationSpeed, direction); // Р’СЂР°С‰РµРЅРёРµ
+                yield return new WaitForSeconds(0.025f); // Р—Р°РґРµСЂР¶РєР° РїР»Р°РІРЅРѕСЃС‚Рё РІСЂР°С‰РµРЅРёСЏ
             }
         }
 
-        private IEnumerator FindShotTarget() // Поиск объекта для выстрела
+        private IEnumerator FindShotTarget() // РџРѕРёСЃРє РѕР±СЉРµРєС‚Р° РґР»СЏ РІС‹СЃС‚СЂРµР»Р°
         {
-            while (true) // Бесконечный цикл
+            while (true) // Р‘РµСЃРєРѕРЅРµС‡РЅС‹Р№ С†РёРєР»
             {
-                RaycastHit hit; // Переменная найденного объекта
-                Vector3 forward = transform.TransformDirection(Vector3.forward); // Получение направления вперёд относительно персонажа
+                RaycastHit hit; // РџРµСЂРµРјРµРЅРЅР°СЏ РЅР°Р№РґРµРЅРЅРѕРіРѕ РѕР±СЉРµРєС‚Р°
+                Vector3 forward = transform.TransformDirection(Vector3.forward); // РџРѕР»СѓС‡РµРЅРёРµ РЅР°РїСЂР°РІР»РµРЅРёСЏ РІРїРµСЂС‘Рґ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РїРµСЂСЃРѕРЅР°Р¶Р°
 
-                if (Physics.Raycast(transform.Find("mesh").position, forward, out hit)) if (hit.collider.gameObject.name == "PlayerPrefab(Clone)") Shot(hit.collider.gameObject); // Выстрел
+                if (Physics.Raycast(transform.Find("mesh").position, forward, out hit)) if (hit.collider.gameObject.name == "PlayerPrefab(Clone)") Shot(hit.collider.gameObject); // Р’С‹СЃС‚СЂРµР»
 
-                yield return new WaitForSeconds(0.5f); // Задержка после выстрела
+                yield return new WaitForSeconds(0.5f); // Р—Р°РґРµСЂР¶РєР° РїРѕСЃР»Рµ РІС‹СЃС‚СЂРµР»Р°
             }
         }
 
-        private void Shot(GameObject @object) // Выстрел
+        private void Shot(GameObject @object) // Р’С‹СЃС‚СЂРµР»
         {
-            Bullet bullet = Instantiate(BulletPrefab, transform.position, transform.rotation).AddComponent<Bullet>(); // Создание пули
-            bullet.OwnerIsBot = true; // Указание бота для пули
-            bullet.EnemyObject = @object; // Указание врага для пули
+            Bullet bullet = Instantiate(BulletPrefab, transform.position, transform.rotation).AddComponent<Bullet>(); // РЎРѕР·РґР°РЅРёРµ РїСѓР»Рё
+            bullet.OwnerIsBot = true; // РЈРєР°Р·Р°РЅРёРµ Р±РѕС‚Р° РґР»СЏ РїСѓР»Рё
+            bullet.EnemyObject = @object; // РЈРєР°Р·Р°РЅРёРµ РІСЂР°РіР° РґР»СЏ РїСѓР»Рё
         }
     }
 }
