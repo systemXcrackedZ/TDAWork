@@ -4,14 +4,14 @@ namespace TDAWork.UI
 {
     public class RicochetDrawer : MonoBehaviour
     {
-        private LineRenderer lineRenderer; // Переменная траектории
+        private LineRenderer lineRenderer; // РџРµСЂРµРјРµРЅРЅР°СЏ С‚СЂР°РµРєС‚РѕСЂРёРё
 
-        private void Awake() => lineRenderer = GetComponent<LineRenderer>(); // Указание значения переменной траектории
+        private void Awake() => lineRenderer = GetComponent<LineRenderer>(); // РЈРєР°Р·Р°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅРѕР№ С‚СЂР°РµРєС‚РѕСЂРёРё
 
-        public void DrawTrajectory(Vector3[] points) // Отрисовка траектории
+        public void DrawTrajectory(Vector3[] points) // РћС‚СЂРёСЃРѕРІРєР° С‚СЂР°РµРєС‚РѕСЂРёРё
         {
-            lineRenderer.positionCount = points.Length; // Указание количества точек
-            lineRenderer.SetPositions(points); // Указание позиции траектории
+            lineRenderer.positionCount = points.Length; // РЈРєР°Р·Р°РЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° С‚РѕС‡РµРє
+            lineRenderer.SetPositions(points); // РЈРєР°Р·Р°РЅРёРµ РїРѕР·РёС†РёРё С‚СЂР°РµРєС‚РѕСЂРёРё
         }
     }
 }
