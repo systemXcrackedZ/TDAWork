@@ -4,32 +4,32 @@ namespace TDAWork.Map
 {
     public class DuelSpawner : MonoBehaviour
     {
-        public static DuelSpawner singleton; // Публичный указатель на класс
+        public static DuelSpawner singleton; // РџСѓР±Р»РёС‡РЅС‹Р№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РєР»Р°СЃСЃ
 
-        [SerializeField] private GameObject playerPrefab; // Префаб игрока
-        [SerializeField] private GameObject enemyPrefab; // Префаб противник
+        [SerializeField] private GameObject playerPrefab; // РџСЂРµС„Р°Р± РёРіСЂРѕРєР°
+        [SerializeField] private GameObject enemyPrefab; // РџСЂРµС„Р°Р± РїСЂРѕС‚РёРІРЅРёРє
 
-        [SerializeField] private Transform playerSpawnTransform; // Трансформ точки спавна игрока
-        [SerializeField] private Transform enemySpawnTransform; // Трансформ точки спавна противника
+        [SerializeField] private Transform playerSpawnTransform; // РўСЂР°РЅСЃС„РѕСЂРј С‚РѕС‡РєРё СЃРїР°РІРЅР° РёРіСЂРѕРєР°
+        [SerializeField] private Transform enemySpawnTransform; // РўСЂР°РЅСЃС„РѕСЂРј С‚РѕС‡РєРё СЃРїР°РІРЅР° РїСЂРѕС‚РёРІРЅРёРєР°
 
-        private GameObject SpawnedPlayer; // Переменная заспавненного игрока
-        private GameObject SpawnedEnemy; // Переменная заспавненного противника
+        private GameObject SpawnedPlayer; // РџРµСЂРµРјРµРЅРЅР°СЏ Р·Р°СЃРїР°РІРЅРµРЅРЅРѕРіРѕ РёРіСЂРѕРєР°
+        private GameObject SpawnedEnemy; // РџРµСЂРµРјРµРЅРЅР°СЏ Р·Р°СЃРїР°РІРЅРµРЅРЅРѕРіРѕ РїСЂРѕС‚РёРІРЅРёРєР°
 
-        private void Start() // Инициализация скрипта
+        private void Start() // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРєСЂРёРїС‚Р°
         {
-            singleton = this; // Указание значения переменной
+            singleton = this; // РЈРєР°Р·Р°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅРѕР№
 
-            SpawnedPlayer = Instantiate(playerPrefab, playerSpawnTransform.position, playerPrefab.transform.rotation); // Указание значения переменной
-            SpawnedEnemy = Instantiate(enemyPrefab, enemySpawnTransform.position, enemyPrefab.transform.rotation); // Указание значения переменной
+            SpawnedPlayer = Instantiate(playerPrefab, playerSpawnTransform.position, playerPrefab.transform.rotation); // РЈРєР°Р·Р°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅРѕР№
+            SpawnedEnemy = Instantiate(enemyPrefab, enemySpawnTransform.position, enemyPrefab.transform.rotation); // РЈРєР°Р·Р°РЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅРѕР№
         }
 
-        public void Respawn() // Метод перезапуска карты
+        public void Respawn() // РњРµС‚РѕРґ РїРµСЂРµР·Р°РїСѓСЃРєР° РєР°СЂС‚С‹
         {
-            Destroy(SpawnedPlayer); SpawnedPlayer = Instantiate(playerPrefab, playerSpawnTransform.position, playerPrefab.transform.rotation); // Перезапуск игрока 
-            Destroy(SpawnedEnemy); SpawnedEnemy = Instantiate(enemyPrefab, enemySpawnTransform.position, enemyPrefab.transform.rotation); // Перезапуск противника 
+            Destroy(SpawnedPlayer); SpawnedPlayer = Instantiate(playerPrefab, playerSpawnTransform.position, playerPrefab.transform.rotation); // РџРµСЂРµР·Р°РїСѓСЃРє РёРіСЂРѕРєР° 
+            Destroy(SpawnedEnemy); SpawnedEnemy = Instantiate(enemyPrefab, enemySpawnTransform.position, enemyPrefab.transform.rotation); // РџРµСЂРµР·Р°РїСѓСЃРє РїСЂРѕС‚РёРІРЅРёРєР° 
 
-            GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet"); // Поиск патронов
-            for (int i = 0; i < bullets.Length; i++) Destroy(bullets[i]); // Удаление патронов
+            GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet"); // РџРѕРёСЃРє РїР°С‚СЂРѕРЅРѕРІ
+            for (int i = 0; i < bullets.Length; i++) Destroy(bullets[i]); // РЈРґР°Р»РµРЅРёРµ РїР°С‚СЂРѕРЅРѕРІ
         }
     }
 }
